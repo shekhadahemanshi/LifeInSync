@@ -1,16 +1,21 @@
-# dig
+# LifeInSync - A Digital Wellbeing Application 
 
-A new Flutter project.
+## Overview
+Digital Wellbeing is a mobile application designed to help users maintain a healthy relationship with technology.
+It provides insights into device usage, promotes mindful digital habits, and helps users manage screen time effectively.
 
-## Getting Started
+## Problem Statement
+Excessive screen time and digital addiction affect productivity, mental health, and sleep patterns.
+This app helps users monitor and control their digital usage for a balanced lifestyle.
 
-This project is a starting point for a Flutter application.
+## Features
 
-A few resources to get you started if this is your first Flutter project:
+ Screen Time Tracking
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+ App Usage Monitoring
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+ Smart Usage Alerts
+
+ Usage Analytics Dashboard
+
+ Goal Setting for Screen Time
