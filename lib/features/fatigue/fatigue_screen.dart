@@ -1,57 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class FatigueScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Wellness Hub')),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            // MOCK DATA: Digital Fatigue Indicator
-            // This will later be connected to your Python FastAPI 'fatigue_analysis' endpoint
-            Container(
-              height: 180,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.indigo, Colors.blueAccent],
-                ),
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Fatigue Score",
-                    style: TextStyle(color: Colors.white70),
-                  ),
-                  Text(
-                    "42%",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 48,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text("Status: Fresh", style: TextStyle(color: Colors.white)),
-                ],
-              ),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("Digital Fatigue Level", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 40),
+          CircularPercentIndicator(
+            radius: 120.0,
+            lineWidth: 15.0,
+            percent: 0.74, // This would come from your FastAPI later
+            center: const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("74%", style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                Text("High", style: TextStyle(color: Colors.redAccent)),
+              ],
             ),
-            SizedBox(height: 20),
-            _buildSmartTip(Icons.lightbulb, "Time for a 20-20-20 eye break."),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSmartTip(IconData icon, String text) {
-    return Card(
-      child: ListTile(
-        leading: Icon(icon, color: Colors.amber),
-        title: Text(text, style: TextStyle(fontSize: 14)),
+            progressColor: Colors.redAccent,
+            backgroundColor: Colors.grey.withOpacity(0.2),
+            circularStrokeCap: CircularStrokeCap.round,
+            animation: true,
+          ),
+          const SizedBox(height: 40),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 40),
+            child: Text("Recommendation: Take a 15-minute break away from all screens.", 
+              textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
+          ),
+        ],
       ),
     );
   }

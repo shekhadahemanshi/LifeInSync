@@ -1,16 +1,13 @@
-# dig
+# Digital Wellbeing App - UI Frontend
 
-A new Flutter project.
+## Setup for Backend Integration
+1. Run `flutter pub get`.
+2. Add your `google-services.json` to `android/app/`.
+3. Run `flutterfire configure` to generate `firebase_options.dart`.
+4. Update `baseUrl` in `lib/services/api_service.dart` with your FastAPI IP.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Current UI Modules
+* **Usage:** Card-based stats (Emerald Theme).
+* **Focus:** Animated timer (LayoutBuilder fixed).
+* **Fatigue:** Animated Gauge (using percent_indicator).
+* **Auth:** Fully validated Login/Register with Theme Toggle.

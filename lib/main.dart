@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart'; // Add this dependency
+// import 'firebase_options.dart'; // She will uncomment this after running flutterfire configure
+
 import 'core/theme/app_theme.dart';
 import 'features/auth/login_screen.dart';
 import 'features/usage/usage_screen.dart';
@@ -6,27 +9,45 @@ import 'features/focus/focus_screen.dart';
 import 'features/fatigue/fatigue_screen.dart';
 import 'features/profile/profile_screen.dart';
 
-void main() => runApp(const DigitalWellbeingApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // --- FIREBASE INITIALIZATION ---
+  // She will uncomment the options line below once she links her project
+  try {
+    await Firebase.initializeApp(
+      // options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    print("Firebase not initialized yet: $e");
+  }
+
+  runApp(const DigitalWellbeingApp());
+}
 
 class DigitalWellbeingApp extends StatefulWidget {
   const DigitalWellbeingApp({super.key});
+
   @override
   DigitalWellbeingAppState createState() => DigitalWellbeingAppState();
 }
 
 class DigitalWellbeingAppState extends State<DigitalWellbeingApp> {
-  ThemeMode _themeMode = ThemeMode.dark; // Default to Classy Dark
+  ThemeMode _themeMode = ThemeMode.dark;
 
-  void toggleTheme() => setState(
-    () => _themeMode = _themeMode == ThemeMode.light
-        ? ThemeMode.dark
-        : ThemeMode.light,
-  );
+  void toggleTheme() {
+    setState(() {
+      _themeMode = _themeMode == ThemeMode.light
+          ? ThemeMode.dark
+          : ThemeMode.light;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: 'Digital Balance',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: _themeMode,
@@ -44,13 +65,16 @@ class AuthWrapper extends StatefulWidget {
 class AuthWrapperState extends State<AuthWrapper> {
   bool isLoggedIn = false;
 
+  // This method is called by the LoginScreen
   void login() => setState(() => isLoggedIn = true);
+
+  // This method is called by the Logout Dialog
   void logout() => setState(() => isLoggedIn = false);
 
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 500),
       child: isLoggedIn ? const MainNavigation() : const LoginScreen(),
     );
   }
@@ -73,16 +97,13 @@ class _MainNavigationState extends State<MainNavigation> {
     ProfileScreen(),
   ];
 
-  // This handles the logout and routing back to Login
   void _confirmLogout(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text("Confirm Logout"),
-        content: const Text(
-          "Are you sure you want to return to the login screen?",
-        ),
+        title: const Text("Logout"),
+        content: const Text("Are you sure you want to end your session?"),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -90,20 +111,13 @@ class _MainNavigationState extends State<MainNavigation> {
           ),
           TextButton(
             onPressed: () {
-              // ---------------------------------------------------------
-              // FIREBASE CALL: auth.signOut()
-              // ---------------------------------------------------------
-              Navigator.pop(context); // Close the dialog
-
-              // This triggers the AuthWrapper to show the LoginScreen
+              // --- HER TASK: Add await FirebaseAuth.instance.signOut(); ---
+              Navigator.pop(context);
               context.findAncestorStateOfType<AuthWrapperState>()?.logout();
             },
             child: const Text(
               "Logout",
-              style: TextStyle(
-                color: Colors.redAccent,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(color: Colors.redAccent),
             ),
           ),
         ],
@@ -121,18 +135,19 @@ class _MainNavigationState extends State<MainNavigation> {
               .findAncestorStateOfType<DigitalWellbeingAppState>()
               ?.toggleTheme(),
         ),
-        title: const Text("BALANCE"),
+        title: const Text(
+          "BALANCE",
+          style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 2),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout_rounded),
-            onPressed: () =>
-                _confirmLogout(context), // Triggers the routing logic
+            onPressed: () => _confirmLogout(context),
           ),
         ],
       ),
       body: IndexedStack(index: _currentIndex, children: _pages),
       bottomNavigationBar: NavigationBar(
-        elevation: 0,
         selectedIndex: _currentIndex,
         onDestinationSelected: (i) => setState(() => _currentIndex = i),
         destinations: const [

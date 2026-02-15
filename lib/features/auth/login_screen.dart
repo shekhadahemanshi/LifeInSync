@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../main.dart';
 import 'register_screen.dart';
+import 'package:dig/services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -84,16 +85,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  onPressed: () {
-                    if (_resetFormKey.currentState!.validate()) {
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
                       // ---------------------------------------------------------
-                      // FIREBASE/API CALL: auth.sendPasswordResetEmail()
-                      // TODO: Integrate FastAPI OTP generation here
+                      // HER TASK: Replace with: await _authService.signIn(...)
                       // ---------------------------------------------------------
-                      Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("OTP sent to your email")),
-                      );
+                      context
+                          .findAncestorStateOfType<AuthWrapperState>()
+                          ?.login();
                     }
                   },
                   child: const Text(
